@@ -13,25 +13,39 @@ public class Milk {
 
         // setup
         Scanner scanner = new Scanner(System.in);
-        String line = scanner.nextLine();
         String[] tasks = new String[100];
+        boolean[] isMarked = new boolean[100];
         int numTasks = 0;
 
-        while (!line.matches("bye")) {
-            switch(line) {
+        String line = scanner.nextLine();
+        String[] words = line.split(" ");
+        while (!words[0].matches("bye")) {
+            switch(words[0]) {
                 case "list":
                     System.out.println("> Here's your tasks!");
                     for (int i = 0; i < numTasks; ++i) {
-                        System.out.println("  " + Integer.toString(i + 1) + ") " + tasks[i]);
+                        String statusIcon = isMarked[i] ? "[X]" : "[ ]";
+                        System.out.println("  " + Integer.toString(i + 1) + ") " + statusIcon + " " + tasks[i]);
                     }
                     break;
+                case "mark":
+                    int toMark = Integer.parseInt(words[1]);
+                    isMarked[toMark - 1] = true;
+                    System.out.println("> " + tasks[toMark - 1] + " has been completed!");
+                    break;
+                case "unmark":
+                    int toUnmark = Integer.parseInt(words[1]);
+                    isMarked[toUnmark - 1] = false;
+                    System.out.println("> " + tasks[toUnmark - 1] + " has been unmarked!");
+                    break;
                 default:
-                    System.out.println("> Okay!! Added: " + line);
                     tasks[numTasks] = line;
                     ++numTasks;
+                    System.out.println("> Okay!! Added: " + line);
                     break;
             }
             line = scanner.nextLine();
+            words = line.split(" ");
         }
 
         System.out.println("> See you next time!~");
