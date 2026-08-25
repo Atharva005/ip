@@ -13,8 +13,7 @@ public class Milk {
 
         // setup
         Scanner scanner = new Scanner(System.in);
-        String[] tasks = new String[100];
-        boolean[] isMarked = new boolean[100];
+        Task[] tasks = new Task[100];
         int numTasks = 0;
 
         String line = scanner.nextLine();
@@ -24,22 +23,21 @@ public class Milk {
                 case "list":
                     System.out.println("> Here's your tasks!");
                     for (int i = 0; i < numTasks; ++i) {
-                        String statusIcon = isMarked[i] ? "[X]" : "[ ]";
-                        System.out.println("  " + Integer.toString(i + 1) + ") " + statusIcon + " " + tasks[i]);
+                        System.out.println("  " + Integer.toString(i + 1) + ") " + tasks[i].getStatusIcon() + " " + tasks[i].getDescription());
                     }
                     break;
                 case "mark":
                     int toMark = Integer.parseInt(words[1]);
-                    isMarked[toMark - 1] = true;
-                    System.out.println("> " + tasks[toMark - 1] + " has been completed!");
+                    tasks[toMark - 1].setMarked(true);
+                    System.out.println("> " + tasks[toMark - 1].getDescription() + " has been completed!");
                     break;
                 case "unmark":
                     int toUnmark = Integer.parseInt(words[1]);
-                    isMarked[toUnmark - 1] = false;
-                    System.out.println("> " + tasks[toUnmark - 1] + " has been unmarked!");
+                    tasks[toUnmark - 1].setMarked(false);
+                    System.out.println("> " + tasks[toUnmark - 1].getDescription() + " has been unmarked!");
                     break;
                 default:
-                    tasks[numTasks] = line;
+                    tasks[numTasks] = new Task(line);
                     ++numTasks;
                     System.out.println("> Okay!! Added: " + line);
                     break;
