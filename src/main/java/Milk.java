@@ -2,24 +2,24 @@ import java.util.Scanner;
 
 public class Milk {
     public static void main(String[] args) {
-        // introduction
-        String banner = " __  __   _   _   _        _   _    \n"
-                + "|  \\/  | (_) | | | | __   | | | |\n"
-                + "| |  | | | | | | |   <    |_| |_|   \n"
-                + "|_|  |_| |_| |_| |_|\\_\\   (_) (_)   \n";
+        String banner = """
+                 __  __   _   _   _        _   _
+                |  \\/  | (_) | | | | __   | | | |
+                | |  | | | | | | |   <    |_| |_|
+                |_|  |_| |_| |_| |_|\\_\\   (_) (_)
+                """;
         // used https://www.asciiart.eu/text-to-ascii-art for this!
         System.out.println(banner);
         System.out.println("> Milk is here!! What do you need today?");
 
-        // setup
         Scanner scanner = new Scanner(System.in);
         Task[] tasks = new Task[100];
         int numTasks = 0;
 
         String line = scanner.nextLine();
         String[] words = line.split(" ");
-        while (!words[0].matches("bye")) {
-            switch(words[0]) {
+        while (!words[0].equals("bye")) {
+            switch (words[0]) {
                 case "list":
                     System.out.println("> Here's your tasks!");
                     for (int i = 0; i < numTasks; ++i) {
