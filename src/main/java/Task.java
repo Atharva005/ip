@@ -1,6 +1,6 @@
 public class Task {
-    private String description;
-    private boolean marked;
+    protected String description;
+    protected boolean marked;
 
     public Task(String description) {
         this.description = description;
@@ -25,5 +25,15 @@ public class Task {
 
     public void setMarked(boolean marked) {
         this.marked = marked;
+    }
+
+    // to override
+    public String getTaskIcon() {
+        return "[ ]";
+    }
+
+    // to override
+    public String getInfo() {
+        return description;
     }
 }

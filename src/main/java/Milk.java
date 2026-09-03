@@ -20,10 +20,29 @@ public class Milk {
         String[] words = line.split(" ");
         while (!words[0].equals("bye")) {
             switch (words[0]) {
+                case "todo":
+                    tasks[numTasks] = new Todo(line);
+                    ++numTasks;
+                    System.out.println("> Okay!! Added todo: " + line.substring(5));
+                    break;
+                case "deadline":
+                    String deadlineIn = line.substring(9);
+                    String[] deadlineParams = deadlineIn.split(" /by ");
+                    tasks[numTasks] = new Deadline(deadlineParams[0], deadlineParams[1]);
+                    ++numTasks;
+                    System.out.println("> Okay!! Added deadline: " + deadlineParams[0] + " (by " + deadlineParams[1] + ")");
+                    break;
+                case "event":
+                    String eventIn = line.substring(6);
+                    String[] eventParams = eventIn.split(" /");
+                    tasks[numTasks] = new Event(eventParams[0], eventParams[1].substring(5), eventParams[2].substring(3));
+                    ++numTasks;
+                    System.out.println("> Okay!! Added deadline: " + eventParams[0] + " (from " + eventParams[1].substring(5) + " to " + eventParams[2].substring(3) + ")");
+                    break;
                 case "list":
                     System.out.println("> Here's your tasks!");
                     for (int i = 0; i < numTasks; ++i) {
-                        System.out.println("  " + Integer.toString(i + 1) + ") " + tasks[i].getStatusIcon() + " " + tasks[i].getDescription());
+                        System.out.println("  " + Integer.toString(i + 1) + ") " + tasks[i].getTaskIcon() + tasks[i].getStatusIcon() + " " + tasks[i].getInfo());
                     }
                     break;
                 case "mark":
@@ -37,9 +56,7 @@ public class Milk {
                     System.out.println("> " + tasks[toUnmark - 1].getDescription() + " has been unmarked!");
                     break;
                 default:
-                    tasks[numTasks] = new Task(line);
-                    ++numTasks;
-                    System.out.println("> Okay!! Added: " + line);
+                    System.out.println("> \"" + line + "\"...? I don't know this command!!");
                     break;
             }
             line = scanner.nextLine();
