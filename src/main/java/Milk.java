@@ -1,68 +1,92 @@
 import java.util.Scanner;
 
 public class Milk {
-    public static void main(String[] args) {
-        String banner = """
-                 __  __   _   _   _        _   _
-                |  \\/  | (_) | | | | __   | | | |
-                | |  | | | | | | |   <    |_| |_|
-                |_|  |_| |_| |_| |_|\\_\\   (_) (_)
-                """;
-        // used https://www.asciiart.eu/text-to-ascii-art for this!
-        System.out.println(banner);
-        System.out.println("> Milk is here!! What do you need today?");
 
-        Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[100];
-        int numTasks = 0;
+    private static Scanner scanner = new Scanner(System.in);
+    private static Task[] tasks = new Task[100];
+    private static int numTasks = 0;
+    private static Ui ui = new Ui();
 
-        String line = scanner.nextLine();
+    private static void handleCommand(String line) {
         String[] words = line.split(" ");
-        while (!words[0].equals("bye")) {
-            switch (words[0]) {
-                case "todo":
-                    tasks[numTasks] = new Todo(line);
-                    ++numTasks;
-                    System.out.println("> Okay!! Added todo: " + line.substring(5));
-                    break;
-                case "deadline":
-                    String deadlineIn = line.substring(9);
-                    String[] deadlineParams = deadlineIn.split(" /by ");
-                    tasks[numTasks] = new Deadline(deadlineParams[0], deadlineParams[1]);
-                    ++numTasks;
-                    System.out.println("> Okay!! Added deadline: " + deadlineParams[0] + " (by " + deadlineParams[1] + ")");
-                    break;
-                case "event":
-                    String eventIn = line.substring(6);
-                    String[] eventParams = eventIn.split(" /");
-                    tasks[numTasks] = new Event(eventParams[0], eventParams[1].substring(5), eventParams[2].substring(3));
-                    ++numTasks;
-                    System.out.println("> Okay!! Added deadline: " + eventParams[0] + " (from " + eventParams[1].substring(5) + " to " + eventParams[2].substring(3) + ")");
-                    break;
-                case "list":
-                    System.out.println("> Here's your tasks!");
-                    for (int i = 0; i < numTasks; ++i) {
-                        System.out.println("  " + Integer.toString(i + 1) + ") " + tasks[i].getTaskIcon() + tasks[i].getStatusIcon() + " " + tasks[i].getInfo());
-                    }
-                    break;
-                case "mark":
-                    int toMark = Integer.parseInt(words[1]);
-                    tasks[toMark - 1].setMarked(true);
-                    System.out.println("> " + tasks[toMark - 1].getDescription() + " has been completed!");
-                    break;
-                case "unmark":
-                    int toUnmark = Integer.parseInt(words[1]);
-                    tasks[toUnmark - 1].setMarked(false);
-                    System.out.println("> " + tasks[toUnmark - 1].getDescription() + " has been unmarked!");
-                    break;
-                default:
-                    System.out.println("> \"" + line + "\"...? I don't know this command!!");
-                    break;
-            }
-            line = scanner.nextLine();
-            words = line.split(" ");
+        String command = words[0];
+        switch (command) {
+            case "todo":
+                handleTodo(line);
+                break;
+            case "deadline":
+                handleDeadline(line);
+                break;
+            case "event":
+                handleEvent(line);
+                break;
+            case "list":
+                listTasks();
+                break;
+            case "mark":
+                markTask(words[1]);
+                break;
+            case "unmark":
+                unmarkTask(words[1]);
+                break;
+            case "bye":
+                break;
+            default:
+                ui.printResponse("\"" + line + "\"...? I don't know this command!!");
+                break;
         }
+    }
 
-        System.out.println("> See you next time!~");
+    private static void handleTodo(String line) {
+        tasks[numTasks] = new Todo(line.substring("todo".length()).trim());
+        ++numTasks;
+        ui.printResponse("Okay!! Added todo: " + line.substring("todo".length()).trim());
+    }
+
+    private static void handleDeadline(String line) {
+        String deadlineIn = line.substring("deadline".length()).trim();
+        String[] deadlineParams = deadlineIn.split(" /by ");
+        tasks[numTasks] = new Deadline(deadlineParams[0], deadlineParams[1]);
+        ++numTasks;
+        ui.printResponse("Okay!! Added deadline: " + deadlineParams[0] + " (by " + deadlineParams[1] + ")");
+    }
+
+    private static void handleEvent(String line) {
+        String eventIn = line.substring("event".length()).trim();
+        String[] eventParams = eventIn.split(" /");
+        eventParams[1] = eventParams[1].substring("from".length()).trim(); // from-value
+        eventParams[2] = eventParams[2].substring("to".length()).trim(); // to-value
+        tasks[numTasks] = new Event(eventParams[0], eventParams[1], eventParams[2]);
+        ++numTasks;
+        ui.printResponse("Okay!! Added event: " + eventParams[0] + " (from " + eventParams[1] + " to " + eventParams[2] + ")");
+    }
+
+    private static void markTask(String toMark) {
+        int indexToMark = Integer.parseInt(toMark);
+        tasks[indexToMark - 1].setMarked(true);
+        ui.printResponse(tasks[indexToMark - 1].getDescription() + " has been completed!");
+    }
+
+    private static void unmarkTask(String toUnmark) {
+        int indexToUnmark = Integer.parseInt(toUnmark);
+        tasks[indexToUnmark - 1].setMarked(false);
+        ui.printResponse(tasks[indexToUnmark - 1].getDescription() + " has been unmarked!");
+    }
+
+    private static void listTasks() {
+        ui.printResponse("Here's your tasks!");
+        for (int i = 0; i < numTasks; ++i) {
+            ui.printResponse("  " + (i + 1) + ") " + tasks[i], false);
+        }
+    }
+
+    public static void main(String[] args) {
+        ui.printGreeting();
+        String line;
+        do {
+            line = ui.readCommand();
+            handleCommand(line);
+        } while (!line.startsWith("bye"));
+        ui.printGoodbye();
     }
 }

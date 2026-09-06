@@ -1,5 +1,5 @@
 public class Deadline extends Task {
-    private String by;
+    protected String by;
     public Deadline(String description, String by) {
         super(description);
         this.by = by;
@@ -19,7 +19,7 @@ public class Deadline extends Task {
     }
 
     @Override
-    public String getInfo() {
-        return this.description + " (by: " + this.by + ")";
+    public String toString() {
+        return getTaskIcon() + getStatusIcon() + " " + super.toString() + " (by: " + this.by + ")";
     }
 }

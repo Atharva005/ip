@@ -32,8 +32,8 @@ public class Task {
         return "[ ]";
     }
 
-    // to override
-    public String getInfo() {
+    @Override
+    public String toString() {
         return description;
     }
 }
