@@ -1,3 +1,12 @@
+package milk.main;
+
+import milk.exception.MilkException;
+import milk.task.Deadline;
+import milk.task.Event;
+import milk.task.Task;
+import milk.task.Todo;
+import milk.ui.Ui;
+
 import java.util.Scanner;
 
 public class Milk {

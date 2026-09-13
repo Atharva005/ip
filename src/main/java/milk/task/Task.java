@@ -1,3 +1,5 @@
+package milk.task;
+
 public class Task {
     protected String description;
     protected boolean marked;
