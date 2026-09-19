@@ -6,8 +6,11 @@ import milk.task.Event;
 import milk.task.Task;
 import milk.task.Todo;
 import milk.ui.Ui;
+import milk.data.FileManager;
 
 import java.util.Scanner;
+
+import java.io.IOException;
 
 public class Milk {
 
@@ -15,6 +18,7 @@ public class Milk {
     private static Task[] tasks = new Task[100];
     private static int numTasks = 0;
     private static Ui ui = new Ui();
+    private static FileManager fileManager = new FileManager();
 
     private static void handleCommand(String line) {
         String[] words = line.split(" ");
@@ -23,21 +27,26 @@ public class Milk {
             switch (command) {
                 case "todo":
                     handleTodo(line);
+                    fileManager.UpdateFile(tasks, numTasks);
                     break;
                 case "deadline":
                     handleDeadline(line);
+                    fileManager.UpdateFile(tasks, numTasks);
                     break;
                 case "event":
                     handleEvent(line);
+                    fileManager.UpdateFile(tasks, numTasks);
                     break;
                 case "list":
                     listTasks();
                     break;
                 case "mark":
                     markTask(words[1]);
+                    fileManager.UpdateFile(tasks, numTasks);
                     break;
                 case "unmark":
                     unmarkTask(words[1]);
+                    fileManager.UpdateFile(tasks, numTasks);
                     break;
                 case "bye":
                     break;
@@ -45,7 +54,9 @@ public class Milk {
                     ui.printResponse("\"" + line + "\"...? I don't know this command!!");
                     break;
             }
-        } catch (MilkException e) { }
+        } catch (MilkException e) {
+        } catch (IOException e) {
+        }
     }
 
     private static void handleTodo(String line) throws MilkException {
@@ -79,9 +90,12 @@ public class Milk {
         ui.printResponse("Okay!! Added event: " + eventParams[0] + " (from " + eventParams[1] + " to " + eventParams[2] + ")");
     }
 
-    private static void markTask(String toMark) {
+    private static void markTask(String toMark) throws MilkException {
         try {
             int indexToMark = Integer.parseInt(toMark);
+            if (indexToMark > numTasks) {
+                throw new MilkException("You don't have that many tasks though...");
+            }
             tasks[indexToMark - 1].setMarked(true);
             ui.printResponse(tasks[indexToMark - 1].getDescription() + " has been completed!");
         } catch (NumberFormatException e) {
@@ -90,9 +104,12 @@ public class Milk {
 
     }
 
-    private static void unmarkTask(String toUnmark) {
+    private static void unmarkTask(String toUnmark) throws MilkException {
         try {
             int indexToUnmark = Integer.parseInt(toUnmark);
+            if (indexToUnmark > numTasks) {
+                throw new MilkException("You don't have that many tasks though...");
+            }
             tasks[indexToUnmark - 1].setMarked(false);
             ui.printResponse(tasks[indexToUnmark - 1].getDescription() + " has been unmarked!");
         } catch (NumberFormatException e) {
@@ -108,6 +125,14 @@ public class Milk {
     }
 
     public static void main(String[] args) {
+        FileManager.CreateFile();
+        tasks = FileManager.LoadFile();
+        for (Task task : tasks) {
+            if (task == null) {
+                break;
+            }
+            numTasks++;
+        }
         ui.printGreeting();
         String line;
         do {
