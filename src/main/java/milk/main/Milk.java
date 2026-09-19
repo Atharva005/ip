@@ -119,13 +119,11 @@ public class Milk {
     private static void markTask(String toMark) throws MilkException {
         try {
             int indexToMark = Integer.parseInt(toMark);
-            tasks.get(indexToMark - 1).setMarked(true);
-            ui.printResponse(tasks.get(indexToMark - 1).getDescription() + " has been completed!");
             if (indexToMark > numTasks) {
                 throw new MilkException("You don't have that many tasks though...");
             }
-            tasks[indexToMark - 1].setMarked(true);
-            ui.printResponse(tasks[indexToMark - 1].getDescription() + " has been completed!");
+            tasks.get(indexToMark - 1).setMarked(true);
+            ui.printResponse(tasks.get(indexToMark - 1).getDescription() + " has been completed!");
         } catch (NumberFormatException e) {
             ui.printResponse("You didn't give me a task to mark!! For example, say \"mark 2\"!");
         }
@@ -138,8 +136,6 @@ public class Milk {
             if (indexToUnmark > numTasks) {
                 throw new MilkException("You don't have that many tasks though...");
             }
-            tasks[indexToUnmark - 1].setMarked(false);
-            ui.printResponse(tasks[indexToUnmark - 1].getDescription() + " has been unmarked!");
             tasks.get(indexToUnmark - 1).setMarked(false);
             ui.printResponse(tasks.get(indexToUnmark - 1).getDescription() + " has been unmarked!");
         } catch (NumberFormatException e) {

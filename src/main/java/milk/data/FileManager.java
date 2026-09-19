@@ -9,6 +9,7 @@ import milk.task.Deadline;
 import milk.task.Event;
 import milk.task.Task;
 import milk.task.Todo;
+import java.util.ArrayList;
 
 public class FileManager {
     public static String filePath = "milk.txt";
@@ -30,8 +31,8 @@ public class FileManager {
         }
     }
 
-    public static Task[] LoadFile() {
-        Task[] tasks = new Task[100];
+    public static ArrayList<Task> LoadFile() {
+        ArrayList<Task> tasks = new ArrayList<>();
         try {
             int numTasks = 0;
             File file = new File(filePath);
@@ -40,20 +41,20 @@ public class FileManager {
                 String line = s.nextLine();
                 switch (line.charAt(0)) {
                     case 'T':
-                        tasks[numTasks] = new Todo(line.substring(4));
+                        tasks.add(new Todo(line.substring(4)));
                         break;
                     case 'D':
                         String[] deadlineParams = line.split(" /by ");
-                        tasks[numTasks] = new Deadline(deadlineParams[0].substring(4), deadlineParams[1]);
+                        tasks.add(new Deadline(deadlineParams[0].substring(4), deadlineParams[1]));
                         break;
                     case 'E':
                         String[] eventParams = line.split("(?:/from |/to )");
-                        tasks[numTasks] = new Event(eventParams[0].substring(4), eventParams[1], eventParams[2]);
+                        tasks.add(new Event(eventParams[0].substring(4), eventParams[1], eventParams[2]));
                         break;
                     default:
                         break;
                 }
-                tasks[numTasks].setMarked(line.charAt(2) == 'M');
+                tasks.get(numTasks).setMarked(line.charAt(2) == 'M');
                 numTasks++;
             }
         } catch (FileNotFoundException e) {
@@ -63,7 +64,7 @@ public class FileManager {
         return tasks;
     }
 
-    public static void UpdateFile(Task[] tasks, int numTasks) throws IOException {
+    public static void UpdateFile(ArrayList<Task> tasks, int numTasks) throws IOException {
         FileWriter fw = new FileWriter(filePath);
         String taskList  = "";
         int i = 0;
@@ -90,7 +91,6 @@ public class FileManager {
             taskList += "\n";
             i++;
         }
-        System.out.println(taskList);
         fw.write(taskList);
         fw.close();
     }
