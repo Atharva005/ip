@@ -22,6 +22,27 @@ public class Milk {
     private static Ui ui = new Ui();
     private static FileManager fileManager = new FileManager();
 
+    public Milk() {
+        FileManager.CreateFile();
+        tasks = FileManager.LoadFile();
+    }
+
+    public void run() {
+        for (Task task : tasks) {
+            if (task == null) {
+                break;
+            }
+            numTasks++;
+        }
+        ui.printGreeting();
+        String line;
+        do {
+            line = ui.readCommand();
+            handleCommand(line);
+        } while (!line.startsWith("bye"));
+        ui.printGoodbye();
+    }
+
     private static void handleCommand(String line) {
         String[] words = line.split(" ");
         String command = words[0];
@@ -60,7 +81,9 @@ public class Milk {
                     break;
             }
         } catch (MilkException e) {
+            ui.printResponse("An exception was caught...");
         } catch (IOException e) {
+            ui.printResponse("An exception was caught...");
         }
     }
 
@@ -151,20 +174,6 @@ public class Milk {
     }
 
     public static void main(String[] args) {
-        FileManager.CreateFile();
-        tasks = FileManager.LoadFile();
-        for (Task task : tasks) {
-            if (task == null) {
-                break;
-            }
-            numTasks++;
-        }
-        ui.printGreeting();
-        String line;
-        do {
-            line = ui.readCommand();
-            handleCommand(line);
-        } while (!line.startsWith("bye"));
-        ui.printGoodbye();
+        new Milk().run();
     }
 }
