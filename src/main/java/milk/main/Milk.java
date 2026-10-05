@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import java.io.IOException;
 
+/**
+ * Main Milk class. Contains all the methods for high-level management by the chatbot.
+ */
 public class Milk {
 
     private static Scanner scanner = new Scanner(System.in);
@@ -22,11 +25,18 @@ public class Milk {
     private static Ui ui = new Ui();
     private static FileManager fileManager = new FileManager();
 
+    /**
+     * Creates a save file if required and loads the task file.
+     */
     public Milk() {
         FileManager.CreateFile();
         tasks = FileManager.LoadFile();
     }
 
+    /**
+     * Main loop of the chatbot.
+     * Exits if the user enters a line starting with "bye".
+     */
     public void run() {
         for (Task task : tasks) {
             if (task == null) {
@@ -188,6 +198,10 @@ public class Milk {
         }
     }
 
+    /**
+     * Runs the constructor and the main loop methods.
+     * @param args args of the program.
+     */
     public static void main(String[] args) {
         new Milk().run();
     }

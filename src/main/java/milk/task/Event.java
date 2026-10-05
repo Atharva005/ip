@@ -1,5 +1,8 @@
 package milk.task;
 
+/**
+ * Represents a task with "from" and "to" values.
+ */
 public class Event extends Task {
     protected String from;
     protected String to;

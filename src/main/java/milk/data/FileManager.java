@@ -11,9 +11,16 @@ import milk.task.Task;
 import milk.task.Todo;
 import java.util.ArrayList;
 
+/**
+ * Contains the methods used for file management for saving and loading tasks.
+ */
 public class FileManager {
     public static String filePath = "milk.txt";
 
+    /**
+     * Checks if a save file exists.
+     * If file does not exist, creates one.
+     */
     public static void CreateFile() {
         File file = new File(filePath);
         try {
@@ -31,6 +38,10 @@ public class FileManager {
         }
     }
 
+    /**
+     * Loads task file.
+     * @return ArrayList of tasks contained in file.
+     */
     public static ArrayList<Task> LoadFile() {
         ArrayList<Task> tasks = new ArrayList<>();
         try {
@@ -64,6 +75,13 @@ public class FileManager {
         return tasks;
     }
 
+    /**
+     * Updates the task file on task changes.
+     *
+     * @param tasks The array of tasks to be updated.
+     * @param numTasks The number of tasks in the array.
+     * @throws IOException If there is an issue with IO when handling the file.
+     */
     public static void UpdateFile(ArrayList<Task> tasks, int numTasks) throws IOException {
         FileWriter fw = new FileWriter(filePath);
         String taskList  = "";

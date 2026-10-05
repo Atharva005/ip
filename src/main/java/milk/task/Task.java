@@ -1,5 +1,8 @@
 package milk.task;
 
+/**
+ * Parent class inherited by the various task classes.
+ */
 public class Task {
     protected String description;
     protected boolean marked;
@@ -9,6 +12,10 @@ public class Task {
         this.marked = false;
     }
 
+    /**
+     * Gets the status icon of the ask (whether it is marked or unamrked).
+     * @return Status icon.
+     */
     public String getStatusIcon() {
         return (marked ? "[X]" : "[ ]");
     }
@@ -29,7 +36,10 @@ public class Task {
         this.marked = marked;
     }
 
-    // to override
+    /**
+     * A placeholder method that is overridden by Task's children.
+     * @return Placeholder icon.
+     */
     public String getTaskIcon() {
         return "[ ]";
     }
