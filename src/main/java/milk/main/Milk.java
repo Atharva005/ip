@@ -76,6 +76,10 @@ public class Milk {
                 case "delete":
                     deleteTask(words[1]);
                     break;
+                case "find":
+                    findTask(line.substring("find".length()).trim());
+                    ui.printResponse(line.substring("find".length()).trim());
+                    break;
                 default:
                     ui.printResponse("\"" + line + "\"...? I don't know this command!!");
                     break;
@@ -170,6 +174,17 @@ public class Milk {
         ui.printResponse("Here's your tasks!");
         for (int i = 0; i < numTasks; ++i) {
             ui.printResponse("  " + (i + 1) + ") " + tasks.get(i), false);
+        }
+    }
+
+    private static void findTask(String phraseToFind) {
+        ui.printResponse("Here's your matching tasks!");
+        int numMatchingTasks = 0;
+        for(int i = 0; i < numTasks; ++i) {
+            if (tasks.get(i).getDescription().contains(phraseToFind)) {
+                numMatchingTasks++;
+                ui.printResponse("  " + numMatchingTasks + ") " + tasks.get(i), false);
+            }
         }
     }
 
